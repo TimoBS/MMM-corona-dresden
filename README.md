@@ -10,7 +10,7 @@ Für die Stadt Braunschweig
 * Zahl der Toten
 * Inzidenz inkl. Chart
 
-![screenshot](https://github.com/tonimoeckel/MMM-corona-dresden/blob/main/screenshot/screen.png)
+![screenshot](https://github.com/TimoBS/MMM-corona-dresden/blob/main/screenshot/screen.png)
 
 
 ### Data Source
