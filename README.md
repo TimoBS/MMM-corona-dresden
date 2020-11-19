@@ -1,5 +1,13 @@
 # MagicMirror Module: MMM-corona-dresden 
 forked from tonimoeckel/MMM-corona-dresden and adapted for Braunschweig.
+By changing "objectIds=17" also possible to use for other cities in Germany.
+
+Still in work - planned changes:
+- proper / new naming of module
+- change data source to RKI to receive more data
+- add revovered people of city
+- add information of Germany as well
+- configuration to change city easier
 
 
 ### The module displays the following information:
