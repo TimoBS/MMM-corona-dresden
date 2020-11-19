@@ -1,4 +1,4 @@
-# MagicMirror Module: MMM-corona-dresden 
+# MagicMirror Module: MMM-corona-nnn 
 forked from tonimoeckel/MMM-corona-dresden and adapted for Braunschweig.
 By changing "objectIds=17" also possible to use for other cities in Germany.
 
