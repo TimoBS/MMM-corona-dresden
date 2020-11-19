@@ -1,8 +1,13 @@
 # MagicMirror Module: MMM-corona-dresden 
+forked from tonimoeckel/MMM-corona-dresden and adapted for Braunschweig.
+
 
 ### The module displays the following information:
 
+Für die Stadt Braunschweig
+* Fälle gesamt
 * Zahl der derzeit angesteckten Personen
+* Zahl der Toten
 * Inzidenz inkl. Chart
 
 ![screenshot](https://github.com/tonimoeckel/MMM-corona-dresden/blob/main/screenshot/screen.png)
@@ -20,7 +25,7 @@ cd ~/MagicMirror/modules
 
 Clone this repository:
 ````
-git clone https://github.com/tonimoeckel/MMM-corona-dresden
+git clone https://github.com/TimoBS/MMM-corona-dresden
 ````
 
 
@@ -34,7 +39,7 @@ modules: [
     {
         module: "MMM-corona-dresden",
         position: "top_left",
-        header: "Corona Dresden",
+        header: "Corona Braunschweig",
         config: {
             
         }
