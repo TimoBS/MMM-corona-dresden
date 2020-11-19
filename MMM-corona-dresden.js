@@ -9,9 +9,11 @@ Module.register("MMM-corona-dresden", {
     // Module config defaults.
     defaults: {
         useHeader: true,
-        header: "Corona Dresden",
+        header: "Corona Braunschweig",
+        cityID: ["17"], // City ID from  https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0/data
         updateInterval: 60 * 60 * 1000, // 1 hour = 100 clues per call
-        url: "https://services.arcgis.com/ORpvigFPJUhb8RDF/arcgis/rest/services/corona_DD_7_Sicht/FeatureServer/0/query?f=json&where=Anzeige_Indikator%3D%27x%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&resultOffset=0&resultRecordCount=50&resultType=standard&cacheHint=true"
+        //url: "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=&objectIds=17&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=OBJECTID%2CGEN%2Ccases7_per_100k%2Ccases_per_population%2Ccases%2Cdeath_rate%2Clast_update&returnGeometry=false&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=4326&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson&token="
+    	  url: "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=&objectIds=17&outFields=OBJECTID,death_rate,cases,deaths,cases_per_100k,cases_per_population,county,last_update,cases7_per_100k,recovered,cases7_bl_per_100k&outSR=4326&f=json"
     },
 
     getStyles: function() {
@@ -59,42 +61,57 @@ Module.register("MMM-corona-dresden", {
 
             const rows = [
                 {
-                    keypath: 'features[0].attributes.Fallzahl',
-                    text: 'Infiziert: {{value}}',
-                    default: 0,
-                    custom: (el, value, data) => {
-
-                        const health = window._.get(this.data,'features[0].attributes.Genesungsfall');
-                        const died = window._.get(this.data,'features[0].attributes.Sterbefall');
-                        el.innerHTML = `Infiziert: ${value-health-died}`;
-                        return el;
-                    }
-                },
-                {
-                    keypath: 'features[0].attributes.Zuwachs_Fallzahl',
-                    text: 'Zuwachs: {{value}}',
+                    keypath: 'features[0].attributes.cases',
+                    text: 'Fälle insgesamt: {{value}}',
                     default: 0,
                     custom: (el, value) => {
-                        if (value < 2){
-                            el.classList.add("green-dark");
-                        } else if (value < 5){
-                            el.classList.add("green");
-                        }else if (value < 12){
-                            el.classList.add("green-light");
-                        } else if (value < 20){
-                            el.classList.add("yellow");
-                        } else if (value < 30){
-                            el.classList.add("orange");
-                        } else if (value < 40){
-                            el.classList.add("orangered");
-                        } else {
-                            el.classList.add("red");
-                        }
+                         return el;
+                    }
+                },
+                {
+                    keypath: 'features[0].attributes.cases_per_100k',
+                    text: 'Aktuell: {{value}}',
+                    default: 0,
+                    custom: (el, value) => {
+                        const cases_rounded = window._.get(this.data,'features[0].attributes.cases_per_100k');
+                        const cases_rounded2 = (Math.round(cases_rounded * 100) / 100  ).toFixed(0);
+                        el.innerHTML = `Infiziert: ${cases_rounded2}`;
                         return el;
                     }
                 },
                 {
-                    keypath: 'features[0].attributes.Inzidenz',
+                    keypath: 'features[0].attributes.deaths',
+                    text: 'Tote: {{value}}',
+                    default: 0,
+                    custom: (el, value) => {
+                         return el;
+                    }
+                },
+                //{
+                //    keypath: 'features[0].attributes.Zuwachs_Fallzahl',
+                //    text: 'Zuwachs: {{value}}',
+                //    default: 0,
+                //    custom: (el, value) => {
+                //        if (value < 2){
+                //            el.classList.add("green-dark");
+                //        } else if (value < 5){
+                //            el.classList.add("green");
+                //        }else if (value < 12){
+                //            el.classList.add("green-light");
+                //        } else if (value < 20){
+                //            el.classList.add("yellow");
+                //        } else if (value < 30){
+                //            el.classList.add("orange");
+                //        } else if (value < 40){
+                //            el.classList.add("orangered");
+                //        } else {
+                //            el.classList.add("red");
+                //        }
+                //        return el;
+                //    }
+                //},
+                {
+                    keypath: 'features[0].attributes.cases7_per_100k',
                     text: 'Inzidenz: {{value}}',
                     default: 0,
                     custom: (el, value) => {
@@ -113,12 +130,15 @@ Module.register("MMM-corona-dresden", {
                         } else {
                             el.classList.add("red");
                         }
+                        const inz_rounded = window._.get(this.data,'features[0].attributes.cases7_per_100k');
+                        const inz_rounded2 = (Math.round(inz_rounded * 100) / 100  ).toFixed(2);
+                        el.innerHTML = `Inzidenz: ${inz_rounded2}`;
                         return el;
                     }
 
                 },
                 {
-                    keypath: 'features[0].attributes.Inzidenz',
+                    keypath: 'features[0].attributes.cases7_per_100k',
                     text: 'Inzidenz: {{value}}',
                     default: 0,
                     custom: (el, value) => {
